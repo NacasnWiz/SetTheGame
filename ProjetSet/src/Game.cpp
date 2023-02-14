@@ -25,19 +25,25 @@ void Game::shuffleDeck(int seed = time(NULL)) {
 }
 
 void Game::start(){
-	shuffleDeck();
+	//shuffleDeck();
 
-	drawFigures(12);
+	drawCards(12);
 }
 
-void Game::drawFigures(int toDraw) {
+void Game::draw() {
 	if (m_deck.empty()) {
 		std::cout << "The deck is empty!\n";
 		return;
 	}
+
+	m_displayed.push_back(m_deck[0]);
+	m_deck.erase(m_deck.begin());
+}
+
+void Game::drawCards(int toDraw = 1) {
+
 	for (int drawed{ 0 }; drawed < toDraw; drawed++) {
-		m_displayed.push_back(m_deck[0]);
-		m_deck.erase(m_deck.begin());
+		draw();
 	}
 }
 
@@ -60,6 +66,7 @@ void Game::deSelectByIndex(unsigned long toDeselect) {
 
 void Game::clearSelection() {
 	m_indexSelected.clear();
+	m_cardsSelected.clear();
 }
 
 void Game::adaptCardsSelectionWithIndexed() {
@@ -94,11 +101,31 @@ bool Game::isSelectedASet() {
 	return true;
 }
 
-void Game::confirmSelection() {
-	if (isSelectedASet()) {
+void Game::removeSelectedCardsFromDisplay() {
+	std::sort(m_indexSelected.begin(), m_indexSelected.end());
+	std::reverse(m_indexSelected.begin(), m_indexSelected.end());
+	for (unsigned long index : m_indexSelected) {
+		m_displayed.erase(m_displayed.begin() + index);
+	}
+}
 
+void Game::confirmSelection() {
+	adaptCardsSelectionWithIndexed();
+
+	if (isSelectedASet()) {
+		removeSelectedCardsFromDisplay();
+		clearSelection();
+		drawCards(3);
+		std::cout << "\nIt is a set!\n\n";
 	}
 	else {
-		std::cout << "Not a set!";
+		std::cout << "Not a set!\n\n";
+	}
+}
+
+void Game::listDisplayedCards() {
+	std::cout << "\nCurrent cards are: \n";
+	for (Figure card : m_displayed) {
+		std::cout << card.getID() << " ";
 	}
 }

@@ -12,17 +12,20 @@ private:
 	std::vector<int> initDeck();
 	void adaptCardsSelectionWithIndexed();
 	bool isSelectedASet();
+	void draw();
 
 public:
 	Game();
 
 	void start();
-	void drawFigures(int);
+	void drawCards(int);
 	void shuffleDeck(int);
 	void selectByIndex(unsigned long);
 	void deSelectByIndex(unsigned long);
 	void clearSelection();
 	void confirmSelection();
+	void listDisplayedCards();
+	void removeSelectedCardsFromDisplay();
 
 	std::vector<int> getDeck() { return m_deck; }
 	std::vector<Figure> getDisplayed() { return m_displayed; }

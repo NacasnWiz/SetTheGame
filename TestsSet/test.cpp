@@ -4,8 +4,16 @@
 
 Game myGame{};
 
+Figure card0{ 0 };
+Figure card0{ 1 };
+Figure card0{ 2 };
+
 TEST(drawFigures_should_work, some_tests) {
 	myGame.start();
+
+	EXPECT_EQ(myGame.getDisplayed().size(), 12);
+	myGame.drawCards(1);
+	EXPECT_EQ(myGame.getDisplayed().size(), 13);
 
 }
 
@@ -40,4 +48,8 @@ TEST(select_and_deselect, quantity_check) {
 TEST(CorrectDisplay, TwelveFiguresAtStart) {
 	myGame.start();
   EXPECT_EQ(myGame.getDisplayed().size(), 12);
+}
+
+TEST(isASet, shouldWork_once) {
+	//EXPECT_EQ()
 }
