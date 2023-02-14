@@ -37,6 +37,7 @@ void manuallyPlayTheGame(Game myGame) {
 	}
 
 	myGame.confirmSelection();
+	myGame.clearSelection();
 	
 	std::cout << "[You can stop playing by picking card 100]\n";
 	manuallyPlayTheGame(myGame);
