@@ -4,12 +4,12 @@
 
 class Game {
 private:
-	std::vector<int> m_deck;
+	std::vector<Figure> m_deck;
 	std::vector<Figure> m_displayed;
 	std::vector<unsigned long> m_indexSelected;
 	std::vector<Figure> m_cardsSelected;
 
-	std::vector<int> initDeck();
+	std::vector<Figure> initDeck();
 	void adaptCardsSelectionWithIndexed();
 	bool isSelectedASet();
 	void draw();
@@ -27,7 +27,7 @@ public:
 	void listDisplayedCards();
 	void removeSelectedCardsFromDisplay();
 
-	std::vector<int> getDeck() { return m_deck; }
+	std::vector<Figure> getDeck() { return m_deck; }
 	std::vector<Figure> getDisplayed() { return m_displayed; }
 	std::vector<unsigned long> getSelectedIndexes() { return m_indexSelected; };
 	std::vector<Figure> getSelectedCards() { return m_cardsSelected; };

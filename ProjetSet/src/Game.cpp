@@ -4,11 +4,13 @@
 #include <iostream>
 
 
-std::vector<int> Game::initDeck() {
-	std::vector<int> output;
+std::vector<Figure> Game::initDeck() {
+	std::vector<Figure> output;
+	Figure newCard{ 0 };
 
 	for (int i{ 0 }; i < 81; i++) {
-		output.push_back(i);
+		newCard = Figure{ i };
+		output.push_back(newCard);
 	}
 
 	return output;
@@ -16,7 +18,7 @@ std::vector<int> Game::initDeck() {
 
 Game::Game()
 	: m_deck {initDeck()}
-	,m_displayed{}, m_indexSelected{}
+	,m_displayed{}, m_indexSelected{}, m_cardsSelected{}
 {
 }
 
@@ -25,7 +27,7 @@ void Game::shuffleDeck(int seed = time(NULL)) {
 }
 
 void Game::start(){
-	//shuffleDeck();
+	shuffleDeck();
 
 	drawCards(12);
 }
@@ -123,9 +125,35 @@ void Game::confirmSelection() {
 	}
 }
 
-void Game::listDisplayedCards() {
-	std::cout << "\nCurrent cards are: \n";
-	for (Figure card : m_displayed) {
+//Experimental
+void printCards(std::vector<Figure> cards) {
+	for (Figure card : cards) {
+		std::cout << card.getColor() << "  ";
+	}
+	std::cout << "\n";
+
+	for (Figure card : cards) {
+		std::cout << card.getShape() << "  ";
+	}
+	std::cout << "\n";
+
+	for (Figure card : cards) {
+		std::cout << card.getFilling() << "  ";
+	}
+	std::cout << "\n";
+
+	for (Figure card : cards) {
+		std::cout << card.getNumber() << "  ";
+	}
+	std::cout << "\n";
+
+	for (Figure card : cards) {
 		std::cout << card.getID() << " ";
 	}
+	std::cout << "\n";
+}
+
+void Game::listDisplayedCards() {
+	std::cout << "\nCurrent cards are: \n";
+	printCards(m_displayed);
 }
