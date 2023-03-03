@@ -148,7 +148,13 @@ void printCards(std::vector<Figure> cards) {
 	std::cout << "\n";
 
 	for (Figure card : cards) {
-		std::cout << card.getID() << " ";
+		if (card.getID() > 9) {
+			std::cout << card.getID() << " ";
+		}
+		else {
+			std::cout << card.getID() << "  ";
+		}
+		
 	}
 	std::cout << "\n";
 }
