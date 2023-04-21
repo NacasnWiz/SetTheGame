@@ -2,6 +2,8 @@
 #include <vector>
 #include "Figure.h"
 
+
+
 class Game {
 private:
 	std::vector<Figure> m_deck;
@@ -11,6 +13,7 @@ private:
 
 	std::vector<Figure> initDeck();
 	void adaptCardsSelectionWithIndexed();
+	bool isASet(const Figure& firstSelected, const Figure& secondSelected, const Figure& thirdSelected);
 	bool isSelectedASet();
 	void draw();
 
@@ -26,6 +29,10 @@ public:
 	void confirmSelection();
 	void listDisplayedCards();
 	void removeSelectedCardsFromDisplay();
+	void printDisplayedCards();
+	bool isThereASet();
+	int m_selectCursor;
+
 
 	std::vector<Figure> getDeck() { return m_deck; }
 	std::vector<Figure> getDisplayed() { return m_displayed; }

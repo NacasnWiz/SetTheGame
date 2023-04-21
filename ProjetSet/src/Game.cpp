@@ -19,6 +19,7 @@ std::vector<Figure> Game::initDeck() {
 Game::Game()
 	: m_deck {initDeck()}
 	,m_displayed{}, m_indexSelected{}, m_cardsSelected{}
+	,m_selectCursor{0}
 {
 }
 
@@ -78,29 +79,34 @@ void Game::adaptCardsSelectionWithIndexed() {
 	}
 }
 
-bool Game::isSelectedASet() {
-	if (m_cardsSelected.size() != 3) {
-		return false;
-	}
-
+bool Game::isASet(const Figure& firstSelected, const Figure& secondSelected, const Figure& thirdSelected) {
 	//TODO: make little functions "is Color same or all different", etc. for readability
-	if ((m_cardsSelected[0].getColor() + m_cardsSelected[1].getColor() + m_cardsSelected[2].getColor()) % 3 != 0) {
+	if ((firstSelected.getColor() + secondSelected.getColor() + thirdSelected.getColor()) % 3 != 0) {
 		return false;
 	}
 
-	if ((m_cardsSelected[0].getShape() + m_cardsSelected[1].getShape() + m_cardsSelected[2].getShape()) % 3 != 0) {
+	if ((firstSelected.getShape() + secondSelected.getShape() + thirdSelected.getShape()) % 3 != 0) {
 		return false;
 	}
 
-	if ((m_cardsSelected[0].getFilling() + m_cardsSelected[1].getFilling() + m_cardsSelected[2].getFilling()) % 3 != 0) {
+	if ((firstSelected.getFilling() + secondSelected.getFilling() + thirdSelected.getFilling()) % 3 != 0) {
 		return false;
 	}
 
-	if ((m_cardsSelected[0].getNumber() + m_cardsSelected[1].getNumber() + m_cardsSelected[2].getNumber()) % 3 != 0) {
+	if ((firstSelected.getNumber() + secondSelected.getNumber() + thirdSelected.getNumber()) % 3 != 0) {
 		return false;
 	}
 
 	return true;
+}
+
+bool Game::isSelectedASet() {
+	if (m_cardsSelected.size() != 3) {
+		return false;
+	}
+	else {
+		return isASet(m_cardsSelected[0], m_cardsSelected[1], m_cardsSelected[2]);
+	}
 }
 
 void Game::removeSelectedCardsFromDisplay() {
@@ -125,41 +131,37 @@ void Game::confirmSelection() {
 	}
 }
 
-//Experimental
-void printCards(std::vector<Figure> cards) {
-	for (Figure card : cards) {
-		std::cout << card.getColor() << "  ";
-	}
-	std::cout << "\n";
 
-	for (Figure card : cards) {
-		std::cout << card.getShape() << "  ";
-	}
-	std::cout << "\n";
+void Game::printDisplayedCards() {
+	const int max_in_row{4};
+	int inRowCount{ 0 };
 
-	for (Figure card : cards) {
-		std::cout << card.getFilling() << "  ";
-	}
-	std::cout << "\n";
-
-	for (Figure card : cards) {
-		std::cout << card.getNumber() << "  ";
-	}
-	std::cout << "\n";
-
-	for (Figure card : cards) {
-		if (card.getID() > 9) {
-			std::cout << card.getID() << " ";
+	for (const Figure& card : m_displayed) {
+		std::cout << card << "  ";
+		++inRowCount;
+		if (inRowCount == max_in_row) {
+			std::cout << '\n' << '\n';
+			inRowCount = 0;
 		}
-		else {
-			std::cout << card.getID() << "  ";
-		}
-		
 	}
-	std::cout << "\n";
 }
 
 void Game::listDisplayedCards() {
-	std::cout << "\nCurrent cards are: \n";
-	printCards(m_displayed);
+	std::cout << "\nCurrent cards are:\n\n";
+	printDisplayedCards();
+}
+
+bool Game::isThereASet() {
+	bool output{ false };
+	for (int firstCardIndex{ 0 }; firstCardIndex < 10; ++firstCardIndex) {
+		for (int secondCardIndex{ firstCardIndex + 1 }; secondCardIndex < 11; ++secondCardIndex) {
+			for (int thirdCardIndex{ secondCardIndex + 1 }; thirdCardIndex < 12; ++thirdCardIndex) {
+				output = isASet(m_displayed[firstCardIndex], m_displayed[secondCardIndex], m_displayed[thirdCardIndex]);
+				if (output) {
+					return true;
+				}
+			}
+		}
+	}
+	return output;
 }

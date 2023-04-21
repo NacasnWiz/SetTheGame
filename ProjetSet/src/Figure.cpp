@@ -14,3 +14,63 @@ Figure::Figure(int ID)
 	m_number { ID % 3 }
 {
 }
+
+
+std::ostream& operator<<(std::ostream& out, const Figure& figure) {
+	char symbol{};
+
+	switch (figure.m_shape) {
+	case triangle:
+		symbol = 'a';
+		break;
+	case square:
+		symbol = 'b';
+		break;
+	case circle:
+		symbol = 'c';
+		break;
+	default:
+		symbol = '?';
+	}
+
+	if (figure.m_filling == hatched) {
+		symbol += 'A' - 'a';
+	}
+
+	switch (figure.m_color) {
+	case blue:
+		out << '1';
+		break;
+	case red:
+		out << '2';
+		break;
+	case green:
+		out << '3';
+		break;
+	default:
+		out << "color?";
+	}
+
+	int trailingSpaces{ 0 };
+
+	for (int symbolCount{ 0 }; symbolCount < 3; ++symbolCount) {
+		if (symbolCount <= figure.m_number){
+			out << symbol;
+			if (figure.m_filling == full) {
+				out << '*';
+			}
+			else {
+				++trailingSpaces;
+			}
+		}
+		else {
+			out << ' ' << ' ';
+		}
+	}
+
+	for (int trailingSpacesCount{ 0 }; trailingSpacesCount < trailingSpaces; ++trailingSpacesCount) {
+		out << ' ';
+	}
+
+	return out;
+}

@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 enum Color {
 	blue = 0,
@@ -31,11 +32,11 @@ public:
 	Figure(Color color, Shape shape, Filling filling, int number);
 	Figure(int ID);
 
-	int getID() { return m_ID; }
-	Shape getShape() { return m_shape; }
-	Color getColor() { return m_color; }
-	Filling getFilling() { return m_filling; }
-	int getNumber() { return m_number; }
+	int getID() const { return m_ID; }
+	Shape getShape() const { return m_shape; }
+	Color getColor() const { return m_color; }
+	Filling getFilling() const { return m_filling; }
+	int getNumber() const { return m_number; }
 
-
+	friend std::ostream& operator<<(std::ostream& out, const Figure& figure);
 };
