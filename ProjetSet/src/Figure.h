@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+#include "Includes.h"
 
 enum Color {
 	blue = 0,
@@ -39,4 +39,24 @@ public:
 	int getNumber() const { return m_number; }
 
 	friend std::ostream& operator<<(std::ostream& out, const Figure& figure);
+};
+
+
+class Card : public Figure {
+private:
+	bool m_isSelected;
+
+public:
+	Card(Color color, Shape shape, Filling filling, int number) :
+		m_isSelected{ false }, Figure(color, shape, filling, number)
+	{
+	}
+
+	Card(int ID) :
+		m_isSelected{ false }, Figure(ID)
+	{
+	}
+
+
+	void select();
 };

@@ -1,7 +1,6 @@
 #pragma once
-#include <vector>
 #include "Figure.h"
-
+#include "Includes.h"
 
 
 class Game {
@@ -20,22 +19,26 @@ private:
 public:
 	Game();
 
+	bool m_isOn{ false };
+
 	void start();
+	void off();
 	void drawCards(int);
 	void shuffleDeck(int);
-	void selectByIndex(unsigned long);
-	void deSelectByIndex(unsigned long);
 	void clearSelection();
-	void confirmSelection();
-	void listDisplayedCards();
-	void removeSelectedCardsFromDisplay();
-	void printDisplayedCards();
 	bool isThereASet();
-	int m_selectCursor;
+
+	void addIndexToSelected(unsigned long index);
+	void removeIndexFromSelected(unsigned long index);
+	
+	//These have to be renamed but interfally act as Game functions and should be called by Interface
+	void removeSelectedCardsFromDisplay();
+	void confirmSelection();
 
 
 	std::vector<Figure> getDeck() { return m_deck; }
 	std::vector<Figure> getDisplayed() { return m_displayed; }
 	std::vector<unsigned long> getSelectedIndexes() { return m_indexSelected; };
 	std::vector<Figure> getSelectedCards() { return m_cardsSelected; };
+
 };

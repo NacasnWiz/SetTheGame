@@ -127,11 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Interface.cpp" />
     <ClCompile Include="src\Figure.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Interface.h" />
     <ClInclude Include="src\Figure.h" />
     <ClInclude Include="src\Game.h" />
   </ItemGroup>

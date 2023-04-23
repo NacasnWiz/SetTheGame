@@ -51,7 +51,7 @@ std::ostream& operator<<(std::ostream& out, const Figure& figure) {
 		out << "color?";
 	}
 
-	int trailingSpaces{ 0 };
+	int trailingSpacesCount{ 0 };
 
 	for (int symbolCount{ 0 }; symbolCount < 3; ++symbolCount) {
 		if (symbolCount <= figure.m_number){
@@ -60,7 +60,7 @@ std::ostream& operator<<(std::ostream& out, const Figure& figure) {
 				out << '*';
 			}
 			else {
-				++trailingSpaces;
+				++trailingSpacesCount;
 			}
 		}
 		else {
@@ -68,9 +68,14 @@ std::ostream& operator<<(std::ostream& out, const Figure& figure) {
 		}
 	}
 
-	for (int trailingSpacesCount{ 0 }; trailingSpacesCount < trailingSpaces; ++trailingSpacesCount) {
+	for (int count{ 0 }; count < trailingSpacesCount; ++count) {
 		out << ' ';
 	}
 
 	return out;
+}
+
+
+void Card::select() {
+	m_isSelected = !m_isSelected;
 }

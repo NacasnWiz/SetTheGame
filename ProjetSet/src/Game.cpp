@@ -1,7 +1,5 @@
 #include "Game.h"
-#include <algorithm>
-#include <random>
-#include <iostream>
+
 
 
 std::vector<Figure> Game::initDeck() {
@@ -19,7 +17,6 @@ std::vector<Figure> Game::initDeck() {
 Game::Game()
 	: m_deck {initDeck()}
 	,m_displayed{}, m_indexSelected{}, m_cardsSelected{}
-	,m_selectCursor{0}
 {
 }
 
@@ -28,9 +25,15 @@ void Game::shuffleDeck(int seed = time(NULL)) {
 }
 
 void Game::start(){
+	m_isOn = true;
+
 	shuffleDeck();
 
 	drawCards(12);
+}
+
+void Game::off() {
+	m_isOn = false;
 }
 
 void Game::draw() {
@@ -50,19 +53,22 @@ void Game::drawCards(int toDraw = 1) {
 	}
 }
 
-void Game::selectByIndex(unsigned long index) {
+void Game::addIndexToSelected(unsigned long index) {
 	if (index >= m_displayed.size()) {
 		std::cout << "There is no card to select here\n";
 		return;
 	}
-	if (std::find(m_indexSelected.begin(), m_indexSelected.end(), index) == m_indexSelected.end()){
+	if (std::find(m_indexSelected.begin(), m_indexSelected.end(), index) == m_indexSelected.end())
+		//If this index isn't already listed
+	{
 		m_indexSelected.push_back(index);
 	}
 }
 
-void Game::deSelectByIndex(unsigned long toDeselect) {
-	auto iteratorToDeselect{ std::find(m_indexSelected.begin(), m_indexSelected.end(), toDeselect) };
-	if (iteratorToDeselect != m_indexSelected.end()) {
+void Game::removeIndexFromSelected(unsigned long index) {
+	auto iteratorToDeselect{ std::find(m_indexSelected.begin(), m_indexSelected.end(), index) };
+	if (iteratorToDeselect != m_indexSelected.end()) //there is such index in the selected indexes
+	{
 		m_indexSelected.erase(iteratorToDeselect);
 	}
 }
@@ -129,26 +135,6 @@ void Game::confirmSelection() {
 	else {
 		std::cout << "Not a set!\n\n";
 	}
-}
-
-
-void Game::printDisplayedCards() {
-	const int max_in_row{4};
-	int inRowCount{ 0 };
-
-	for (const Figure& card : m_displayed) {
-		std::cout << card << "  ";
-		++inRowCount;
-		if (inRowCount == max_in_row) {
-			std::cout << '\n' << '\n';
-			inRowCount = 0;
-		}
-	}
-}
-
-void Game::listDisplayedCards() {
-	std::cout << "\nCurrent cards are:\n\n";
-	printDisplayedCards();
 }
 
 bool Game::isThereASet() {
