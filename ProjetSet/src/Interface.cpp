@@ -18,11 +18,12 @@ void UserInterface::greetPlayer() {
 	std::cout << " You can call it by entering - 1\n\n";
 
 
+	listDisplayedCards();
+
 }
 
 void UserInterface::playTheGame() {
 	while (m_currentGame.m_isOn) {
-		listDisplayedCards();
 		int intInput{ 0 };
 		char charInput{ 0 };
 
@@ -40,6 +41,9 @@ void UserInterface::playTheGame() {
 
 			}
 		}
+
+		listDisplayedCards();
+
 
 		m_currentGame.confirmSelection();
 		m_currentGame.clearSelection();
@@ -145,6 +149,7 @@ void UserInterface::treatIntInput(int intInput) {
 		}
 		else {
 			std::cout << "\nThere is, in fact, no set.\n";
+			m_currentGame.drawCards(3);
 		}
 	}
 

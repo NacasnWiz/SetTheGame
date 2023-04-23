@@ -2,6 +2,8 @@
 #include "Game.h"
 #include "ClearConsole.h"
 
+#include "Includes.h"
+
 
 class UserInterface {
 private:

@@ -1,4 +1,9 @@
 #include "ClearConsole.h"
+//THIS CODE IS NOT MINE I BORROWED IT FROM STACK OVERFLOW (thank you, user Cameron!)
+
+#include <Windows.h>
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
 
 void cls()
 {

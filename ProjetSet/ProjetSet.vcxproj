@@ -127,12 +127,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ClearConsole.cpp" />
     <ClCompile Include="src\Interface.cpp" />
     <ClCompile Include="src\Figure.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ClearConsole.h" />
+    <ClInclude Include="src\Includes.h" />
     <ClInclude Include="src\Interface.h" />
     <ClInclude Include="src\Figure.h" />
     <ClInclude Include="src\Game.h" />

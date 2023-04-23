@@ -129,12 +129,15 @@ void Game::confirmSelection() {
 	if (isSelectedASet()) {
 		removeSelectedCardsFromDisplay();
 		clearSelection();
-		drawCards(3);
+		if (m_displayed.size() < 12) {
+			drawCards(3);
+		}
 		std::cout << "\nIt is a set!\n\n";
 	}
 	else {
 		std::cout << "Not a set!\n\n";
 	}
+
 }
 
 bool Game::isThereASet() {
