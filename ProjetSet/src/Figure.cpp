@@ -77,5 +77,20 @@ std::ostream& operator<<(std::ostream& out, const Figure& figure) {
 
 
 void Card::select() {
-	m_isSelected = !m_isSelected;
+	m_isSelected = true;
+}
+
+void Card::deSelect() {
+	m_isSelected = false;
+}
+
+std::ostream& operator<<(std::ostream& out, const Card& card) {
+	if (card.isSelected()) {
+		out << '|';
+	}
+	else {
+		out << ' ';
+	}
+	out << Figure(card);
+	return out;
 }

@@ -16,7 +16,7 @@ std::vector<Figure> Game::initDeck() {
 
 Game::Game()
 	: m_deck {initDeck()}
-	,m_displayed{}, m_indexSelected{}, m_cardsSelected{}
+	,m_displayed{}, m_selectedIndexes{}
 {
 }
 
@@ -42,7 +42,7 @@ void Game::draw() {
 		return;
 	}
 
-	m_displayed.push_back(m_deck[0]);
+	m_displayed.push_back(Card(m_deck[0].getID()));
 	m_deck.erase(m_deck.begin());
 }
 
@@ -53,37 +53,42 @@ void Game::drawCards(int toDraw = 1) {
 	}
 }
 
-void Game::addIndexToSelected(unsigned long index) {
+void Game::selectDisplayedCardByIndex(unsigned long index) {
 	if (index >= m_displayed.size()) {
 		std::cout << "There is no card to select here\n";
 		return;
-	}
-	if (std::find(m_indexSelected.begin(), m_indexSelected.end(), index) == m_indexSelected.end())
-		//If this index isn't already listed
-	{
-		m_indexSelected.push_back(index);
-	}
+	} //Replace with an exception
+
+	m_displayed[index].select();
+	m_selectedIndexes.push_back(index);
+}
+
+void Game::deselectDisplayedCardByIndex(unsigned long index) {
+	if (index >= m_displayed.size()) {
+		std::cout << "There is no card to select here\n";
+		return;
+	} //Replace with an exception
+
+	m_displayed[index].deSelect();
+	removeIndexFromSelected(index);
 }
 
 void Game::removeIndexFromSelected(unsigned long index) {
-	auto iteratorToDeselect{ std::find(m_indexSelected.begin(), m_indexSelected.end(), index) };
-	if (iteratorToDeselect != m_indexSelected.end()) //there is such index in the selected indexes
+	auto iteratorToDeselect{ std::find(m_selectedIndexes.begin(), m_selectedIndexes.end(), index) };
+	if (iteratorToDeselect != m_selectedIndexes.end()) //there is such index in the selected indexes
 	{
-		m_indexSelected.erase(iteratorToDeselect);
+		m_selectedIndexes.erase(iteratorToDeselect);
 	}
 }
 
 void Game::clearSelection() {
-	m_indexSelected.clear();
-	m_cardsSelected.clear();
+	for (unsigned long index : m_selectedIndexes) {
+		m_displayed[index].deSelect();
+	}
+
+	m_selectedIndexes.clear();
 }
 
-void Game::adaptCardsSelectionWithIndexed() {
-	m_cardsSelected.clear();
-	for (unsigned long index : m_indexSelected) {
-		m_cardsSelected.push_back(m_displayed[index]);
-	}
-}
 
 bool Game::isASet(const Figure& firstSelected, const Figure& secondSelected, const Figure& thirdSelected) {
 	//TODO: make little functions "is Color same or all different", etc. for readability
@@ -107,24 +112,23 @@ bool Game::isASet(const Figure& firstSelected, const Figure& secondSelected, con
 }
 
 bool Game::isSelectedASet() {
-	if (m_cardsSelected.size() != 3) {
+	if (m_selectedIndexes.size() != 3) {
 		return false;
 	}
 	else {
-		return isASet(m_cardsSelected[0], m_cardsSelected[1], m_cardsSelected[2]);
+		return isASet(m_displayed[m_selectedIndexes[0]], m_displayed[m_selectedIndexes[1]], m_displayed[m_selectedIndexes[2]]);
 	}
 }
 
 void Game::removeSelectedCardsFromDisplay() {
-	std::sort(m_indexSelected.begin(), m_indexSelected.end());
-	std::reverse(m_indexSelected.begin(), m_indexSelected.end());
-	for (unsigned long index : m_indexSelected) {
+	std::sort(m_selectedIndexes.begin(), m_selectedIndexes.end());
+	std::reverse(m_selectedIndexes.begin(), m_selectedIndexes.end());
+	for (unsigned long index : m_selectedIndexes) {
 		m_displayed.erase(m_displayed.begin() + index);
 	}
 }
 
-void Game::confirmSelection() {
-	adaptCardsSelectionWithIndexed();
+void Game::resolveConfirmSelection() {
 
 	if (isSelectedASet()) {
 		removeSelectedCardsFromDisplay();

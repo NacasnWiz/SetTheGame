@@ -20,7 +20,7 @@ enum Filling {
 };
 
 class Figure {
-private:
+protected:
 	Color m_color;
 	Shape m_shape;
 	Filling m_filling;
@@ -48,15 +48,21 @@ private:
 
 public:
 	Card(Color color, Shape shape, Filling filling, int number) :
-		m_isSelected{ false }, Figure(color, shape, filling, number)
+		m_isSelected{ false }, Figure{ color, shape, filling, number }
 	{
 	}
 
 	Card(int ID) :
-		m_isSelected{ false }, Figure(ID)
+		m_isSelected{ false }, Figure{ ID }
 	{
 	}
 
-
 	void select();
+	void deSelect();
+
+	bool isSelected() const { return m_isSelected; };
+
+	//operator Figure() const { return Figure{ m_ID }; }
+
+	friend std::ostream& operator<<(std::ostream& out, const Card& card);
 };

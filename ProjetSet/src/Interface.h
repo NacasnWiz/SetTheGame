@@ -12,6 +12,8 @@ private:
 	bool m_cursorSelectionMode;
 	const int MAX_IN_ROW{ 4 };
 
+	std::string m_textMessage{};
+
 public:
 	UserInterface(Game& currentGame);
 
@@ -22,19 +24,17 @@ public:
 	void printDisplayedCards();
 	void printCursorLine(int& cardCount);
 
-	void selectByIndex(unsigned long index);
-	void deselectByIndex(unsigned long index);
+	void toggleSelectDisplayedCard(unsigned long index);
 
 	void swapSelectionMode();
 
-	
+	void confirmSelection();
 
 	int receiveIntInput();
 	void treatIntInput(int intInput);
 
 	char receiveCharInput();
 	bool isCharInputValid(char input);
-	void select(int toSelect);
 	void treatCharInput(char charInput);
 
 	void moveCursor(char direction);

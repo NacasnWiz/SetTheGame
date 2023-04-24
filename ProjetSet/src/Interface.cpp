@@ -18,8 +18,17 @@ void UserInterface::greetPlayer() {
 	std::cout << " You can call it by entering - 1\n\n";
 
 
-	listDisplayedCards();
+	
 
+	std::cout << "When you're ready to play, enter any key...\n";
+	char x{};
+	std::cin >> x;
+
+	std::cin.clear();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+
+	listDisplayedCards();
 }
 
 void UserInterface::playTheGame() {
@@ -32,27 +41,26 @@ void UserInterface::playTheGame() {
 				charInput = receiveCharInput();
 				treatCharInput(charInput);
 				listDisplayedCards();
+				std::cout << m_textMessage;
+				m_textMessage.clear();
 
 			}
 			else {
 				intInput = receiveIntInput();
 				treatIntInput(intInput);
 				listDisplayedCards();
+				std::cout << m_textMessage;
+				m_textMessage.clear();
 
 			}
 		}
 
-		listDisplayedCards();
-
-
-		m_currentGame.confirmSelection();
+		confirmSelection();
 		m_currentGame.clearSelection();
 
 		std::cout << "\n[You can stop playing by picking card 100]\n";
 		playTheGame();
 	}
-
-
 }
 
 void UserInterface::listDisplayedCards() {
@@ -65,7 +73,7 @@ void UserInterface::printDisplayedCards() {
 	int inRowCount{ 0 };
 	int cardCount{ 0 };
 
-	for (const Figure& card : m_currentGame.getDisplayed()) {
+	for (const Card& card : m_currentGame.getDisplayed()) {
 		std::cout << card << "  ";
 		++inRowCount;
 		if (inRowCount == MAX_IN_ROW) {
@@ -82,22 +90,27 @@ void UserInterface::printDisplayedCards() {
 void UserInterface::printCursorLine(int& cardCount) {
 	for (int count{ 0 }; count < MAX_IN_ROW; ++count) {
 		if (cardCount == m_cursorPos) {
-			std::cout << ' ' << '^' << ' ' << ' ' << ' ' << ' ';
+			std::cout << ' ' << '^' << ' ' << ' ' << ' ' << ' ' << ' ';
 		}
 		else {
-			std::cout << ' ' << ' ' << ' ' << ' ' << ' ' << ' ';
+			std::cout << ' ' << ' ' << ' ' << ' ' << ' ' << ' ' << ' ';
 		}
 		std::cout << ' ' << ' ' << ' ';
 		++cardCount;
 	}
 }
 
-void UserInterface::selectByIndex(unsigned long index) {
-	m_currentGame.addIndexToSelected(index);
+void UserInterface::confirmSelection() {
+	m_currentGame.resolveConfirmSelection();
 }
 
-void UserInterface::deselectByIndex(unsigned long index) {
-	m_currentGame.removeIndexFromSelected(index);
+void UserInterface::toggleSelectDisplayedCard(unsigned long index) {
+	if (m_currentGame.getDisplayed()[index].isSelected()) {
+		m_currentGame.deselectDisplayedCardByIndex(index);
+	}
+	else {
+		m_currentGame.selectDisplayedCardByIndex(index);
+	}
 }
 
 
@@ -144,8 +157,7 @@ void UserInterface::treatIntInput(int intInput) {
 
 	if (intInput == -1) {
 		if (m_currentGame.isThereASet()) {
-			std::cout << "\nThere IS a set! You can find it!\n";
-			listDisplayedCards();
+			m_textMessage = "There IS a set! You can find it!\n";
 		}
 		else {
 			std::cout << "\nThere is, in fact, no set.\n";
@@ -154,7 +166,7 @@ void UserInterface::treatIntInput(int intInput) {
 	}
 
 	else {
-		selectByIndex(intInput - 1);
+		toggleSelectDisplayedCard(intInput - 1);
 	}
 }
 
@@ -190,22 +202,13 @@ void UserInterface::treatCharInput(char charInput) {
 		return;
 	}
 	if (charInput == 'e' || charInput == 'E') {
-		select(m_cursorPos);
+		toggleSelectDisplayedCard(m_cursorPos);
 	}
 	else {
 		moveCursor(charInput);
 	}
 }
 
-void UserInterface::select(int toSelect) {
-	if (m_cursorPos >= 0 && m_cursorPos <= m_currentGame.getDisplayed().size()) {
-		m_currentGame.addIndexToSelected(m_cursorPos);
-	}
-	
-	//TO WRITE MORE OF THE INTERFACE
-
-
-}
 
 void UserInterface::moveCursor(char direction) {
 	switch (direction) {
@@ -232,7 +235,7 @@ void UserInterface::moveCursor(char direction) {
 	if (m_cursorPos < 0) {
 		m_cursorPos += m_currentGame.getDisplayed().size();
 	}
-	if (m_cursorPos > m_currentGame.getDisplayed().size()) {
+	if (m_cursorPos >= m_currentGame.getDisplayed().size()) {
 		m_cursorPos -= m_currentGame.getDisplayed().size();
 	}
 }
